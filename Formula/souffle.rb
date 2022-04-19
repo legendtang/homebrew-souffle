@@ -10,16 +10,16 @@ class Souffle < Formula
   depends_on "bison" => :build
   depends_on "cmake" => :build
   depends_on "libffi" => :build
+  depends_on "libomp" => :build
   depends_on "mcpp"
   depends_on "pkg-config" => :build
-  depends_on "gcc"
 
   def install
     if build.head?
       system "git", "fetch", "--tags"
     end
 
-    system "cmake", "-B", "build", "-S", ".", "-DCMAKE_INSTALL_PREFIX=#{prefix}","-DSOUFFLE_GIT=OFF", "-DSOUFFLE_BASH_COMPLETION=OFF", "-DCMAKE_C_COMPILER=gcc-11", "-DCMAKE_CXX_COMPILER=g++-11"
+    system "cmake", "-B", "build", "-S", ".", "-DCMAKE_INSTALL_PREFIX=#{prefix}","-DSOUFFLE_GIT=OFF", "-DSOUFFLE_BASH_COMPLETION=OFF", "-DCMAKE_C_COMPILER=/usr/bin/cc", "-DCMAKE_CXX_COMPILER=/usr/bin/c++", "-DBISON_EXECUTABLE=/usr/local/opt/bison/bin/bison", "-DCMAKE_CXX_FLAGS=-isystem\ /usr/local/include", "-DCMAKE_CXX_STANDARD_LIBRARIES=-lomp"
     system "cmake", "--build", "build", "--target", "install", "-j17"
   end
 
